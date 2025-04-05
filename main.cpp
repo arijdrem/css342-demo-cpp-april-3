@@ -96,11 +96,73 @@ void test_isPrime() {
 
     cout << (pass ? "PASS" : "FAIL") << endl;
 }
+/*
+ * Helper function: gcd
+ * Returns the greatest common divisor of two numbers.
+ * I used a basic loop-based approach (not recursive) so I could follow what’s happening.
+ * I used ChatGPT to help understand how GCD reduction works with integers only.
+ */
+int gcd(int a, int b) {
+    // Always work with positive numbers
+    if (a < 0) a = -a;
+    if (b < 0) b = -b;
+
+    // Loop version of Euclid's algorithm
+    while (b != 0) {
+        int temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
+
+/*
+ * Function: reduceFraction
+ * Takes in two ints by reference and reduces the fraction.
+ * For example, 12/18 becomes 2/3.
+ */
+void reduceFraction(int& num, int& denom) {
+    int g = gcd(num, denom);
+    num /= g;
+    denom /= g;
+}
+
+/*
+ * Function: test_reduceFraction
+ * Runs test cases and checks if the reduced fraction is correct.
+ * I had to write checks using == on num/denom since there’s no "Fraction" object.
+ */
+void test_reduceFraction() {
+    bool pass = true;
+
+    int n1 = 12, d1 = 18;
+    reduceFraction(n1, d1);
+    pass &= (n1 == 2 && d1 == 3);
+
+    int n2 = 2, d2 = 3;
+    reduceFraction(n2, d2);
+    pass &= (n2 == 2 && d2 == 3);
+
+    int n3 = 12, d3 = 14;
+    reduceFraction(n3, d3);
+    pass &= (n3 == 6 && d3 == 7);
+
+    int n4 = 3, d4 = 2;
+    reduceFraction(n4, d4);
+    pass &= (n4 == 3 && d4 == 2);
+
+    int n5 = 2, d5 = 4;
+    reduceFraction(n5, d5);
+    pass &= (n5 == 1 && d5 == 2);
+
+    cout << (pass ? "PASS" : "FAIL") << endl;
+}
 
 int main() {
     test_isPowerOfTwo();
     test_isPrime();
-    // reduceFraction test will go here next
+    test_reduceFraction();
     return 0;
 }
+
 
